@@ -24,6 +24,28 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Check for item collection
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            CheckForCollectible();
+        }
+
+        // Toggle inventory UI
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            InventoryUI.Instance.ToggleInventory();
+        }
+    }
+
+    void CheckForCollectible()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.TryGetComponent<PokemonCollectible>(out var collectible))
+            {
+                collectible.Collect();
+            }
+        }
     }
 }

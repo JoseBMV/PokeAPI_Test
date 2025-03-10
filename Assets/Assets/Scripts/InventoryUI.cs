@@ -77,7 +77,20 @@ public class InventoryUI : MonoBehaviour
             if (pokemonName != null)
                 pokemonName.text = item.name;
             if (pokemonDescription != null)
-                pokemonDescription.text = item.description;
+            {
+                string details = $"Types: {string.Join(", ", item.types)}\n" +
+                               $"Height: {item.height/10.0f}m\n" +
+                               $"Weight: {item.weight/10.0f}kg\n" +
+                               $"Base Experience: {item.baseExperience}\n" +
+                               "Stats:\n";
+                
+                foreach (var stat in item.statsArray)
+                {
+                    details += $"{stat.statName}: {stat.value}\n";
+                }
+                
+                pokemonDescription.text = details;
+            }
             if (pokemonImage != null)
             {
                 StartCoroutine(PokeAPIManager.Instance.LoadSprite(item.spriteUrl, 

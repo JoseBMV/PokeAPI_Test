@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 public class PokeAPIManager : MonoBehaviour
 {
@@ -32,13 +34,28 @@ public class PokeAPIManager : MonoBehaviour
             if (www.result == UnityWebRequest.Result.Success)
             {
                 string json = www.downloadHandler.text;
-                // Parse JSON and create PokemonItem
-                // Simplified for example
+                PokemonJsonData pokemonData = JsonUtility.FromJson<PokemonJsonData>(json);
+                
+                // Procesar tipos
+                string[] types = pokemonData.types.Select(t => t.type.name).ToArray();
+                
+                // Procesar stats
+                Dictionary<string, int> stats = new Dictionary<string, int>();
+                foreach (var stat in pokemonData.stats)
+                {
+                    stats[stat.stat.name] = stat.base_stat;
+                }
+
                 var pokemonItem = new PokemonItem(
                     pokemonId,
-                    JsonUtility.FromJson<PokemonJsonData>(json).name,
-                    JsonUtility.FromJson<PokemonJsonData>(json).sprites.front_default,
-                    "A Pokemon item"
+                    pokemonData.name,
+                    pokemonData.sprites.front_default,
+                    "A Pokemon item",
+                    types,
+                    pokemonData.height,
+                    pokemonData.weight,
+                    pokemonData.base_experience,
+                    stats
                 );
                 callback(pokemonItem);
             }
@@ -66,6 +83,36 @@ class PokemonJsonData
 {
     public string name;
     public Sprites sprites;
+    public PokemonType[] types;
+    public int height;
+    public int weight;
+    public int base_experience;
+    public PokemonStat[] stats;
+}
+
+[System.Serializable]
+class PokemonType
+{
+    public TypeInfo type;
+}
+
+[System.Serializable]
+class TypeInfo
+{
+    public string name;
+}
+
+[System.Serializable]
+class PokemonStat
+{
+    public int base_stat;
+    public StatInfo stat;
+}
+
+[System.Serializable]
+class StatInfo
+{
+    public string name;
 }
 
 [System.Serializable]

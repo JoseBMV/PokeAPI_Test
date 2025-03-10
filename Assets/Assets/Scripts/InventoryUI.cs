@@ -1,29 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Añadir TMPro
 
 public class InventoryUI : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject inventoryPanel;
-    public Transform itemsContainer;
-    public GameObject itemPrefab;
+    public GameObject inventoryPanel;    // Panel principal del inventario
+    public Transform itemsContainer;     // Contenedor de items
+    public GameObject itemPrefab;        // Prefab del item
 
     [Header("UI Item Components")]
-    public float itemSpacing = 10f;
+    public float itemSpacing = 10f;     // Espacio entre items
 
     public static InventoryUI Instance { get; private set; }
 
     void Awake()
     {
         Instance = this;
-        if (inventoryPanel == null)
-            Debug.LogError("inventoryPanel no está asignado en el Inspector");
-        if (itemsContainer == null)
-            Debug.LogError("itemsContainer no está asignado en el Inspector");
-        if (itemPrefab == null)
-            Debug.LogError("itemPrefab no está asignado en el Inspector");
-            
         inventoryPanel.SetActive(false);
     }
 
@@ -45,12 +37,6 @@ public class InventoryUI : MonoBehaviour
 
     void RefreshInventory()
     {
-        if (itemsContainer == null || itemPrefab == null)
-        {
-            Debug.LogError("Faltan referencias necesarias en InventoryUI");
-            return;
-        }
-
         foreach (Transform child in itemsContainer)
         {
             Destroy(child.gameObject);
@@ -60,10 +46,10 @@ public class InventoryUI : MonoBehaviour
         {
             GameObject itemUI = Instantiate(itemPrefab, itemsContainer);
             
-            // Buscar referencias usando GetComponentInChildren para ser más flexibles
-            Image pokemonImage = itemUI.GetComponentInChildren<Image>();
-            TextMeshProUGUI pokemonName = itemUI.transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
-            TextMeshProUGUI pokemonDescription = itemUI.transform.Find("DescriptionText")?.GetComponent<TextMeshProUGUI>();
+            // Configurar la imagen del Pokémon
+            Image pokemonImage = itemUI.transform.Find("PokemonImage").GetComponent<Image>();
+            Text pokemonName = itemUI.transform.Find("NameText").GetComponent<Text>();
+            Text pokemonDescription = itemUI.transform.Find("DescriptionText").GetComponent<Text>();
 
             // Verificar que tenemos todas las referencias
             if (pokemonImage == null)
@@ -77,20 +63,7 @@ public class InventoryUI : MonoBehaviour
             if (pokemonName != null)
                 pokemonName.text = item.name;
             if (pokemonDescription != null)
-            {
-                string details = $"Types: {string.Join(", ", item.types)}\n" +
-                               $"Height: {item.height/10.0f}m\n" +
-                               $"Weight: {item.weight/10.0f}kg\n" +
-                               $"Base Experience: {item.baseExperience}\n" +
-                               "Stats:\n";
-                
-                foreach (var stat in item.statsArray)
-                {
-                    details += $"{stat.statName}: {stat.value}\n";
-                }
-                
-                pokemonDescription.text = details;
-            }
+                pokemonDescription.text = item.description;
             if (pokemonImage != null)
             {
                 StartCoroutine(PokeAPIManager.Instance.LoadSprite(item.spriteUrl, 

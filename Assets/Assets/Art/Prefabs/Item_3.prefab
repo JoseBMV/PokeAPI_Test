@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5850752513894503864}
   - component: {fileID: 2264104396901920398}
   - component: {fileID: 5092791989145103404}
-  - component: {fileID: 4914912413305182376}
+  - component: {fileID: 5110542473416019267}
   m_Layer: 0
-  m_Name: Item
+  m_Name: Item_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6f320f2350c5899499dff56b6d1a6399, type: 2}
+  - {fileID: 2100000, guid: 400053e5b204243469f7034d7f59dc57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4914912413305182376
+--- !u!114 &5110542473416019267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2f6f64747479a64387d2f060b36bd19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pokemonId: 1
+  pokemonId: 2

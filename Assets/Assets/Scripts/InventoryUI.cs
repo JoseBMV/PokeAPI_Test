@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventoryUI : MonoBehaviour
 {
     [Header("UI References")]
-    public GameObject inventoryPanel;    // Panel principal del inventario
-    public Transform itemsContainer;     // Contenedor de items
-    public GameObject itemPrefab;        // Prefab del item
+    public GameObject inventoryPanel;
+    public Transform itemsContainer;
+    public GameObject itemPrefab;
 
-    [Header("UI Item Components")]
-    public float itemSpacing = 10f;     // Espacio entre items
+    [Header("UI Style")]
+    [SerializeField] private Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.95f);
+    [SerializeField] private Color textColor = new Color(1f, 1f, 1f, 1f);
 
     public static InventoryUI Instance { get; private set; }
 
@@ -17,6 +19,22 @@ public class InventoryUI : MonoBehaviour
     {
         Instance = this;
         inventoryPanel.SetActive(false);
+        ApplyVisualStyle();
+    }
+
+    private void ApplyVisualStyle()
+    {
+        var panelImage = inventoryPanel.GetComponent<Image>();
+        if (panelImage != null)
+            panelImage.color = backgroundColor;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && inventoryPanel.activeSelf)
+        {
+            ToggleInventory();
+        }
     }
 
     public void ToggleInventory()
@@ -46,26 +64,18 @@ public class InventoryUI : MonoBehaviour
         {
             GameObject itemUI = Instantiate(itemPrefab, itemsContainer);
             
-            // Configurar la imagen del Pokémon
             Image pokemonImage = itemUI.transform.Find("PokemonImage").GetComponent<Image>();
-            Text pokemonName = itemUI.transform.Find("NameText").GetComponent<Text>();
-            Text pokemonDescription = itemUI.transform.Find("DescriptionText").GetComponent<Text>();
+            TextMeshProUGUI pokemonName = itemUI.transform.Find("NameText").GetComponent<TextMeshProUGUI>();
 
-            // Verificar que tenemos todas las referencias
-            if (pokemonImage == null)
-                Debug.LogError($"No se encontró el componente Image en el itemPrefab");
-            if (pokemonName == null)
-                Debug.LogError($"No se encontró el componente NameText (TextMeshProUGUI) en el itemPrefab");
-            if (pokemonDescription == null)
-                Debug.LogError($"No se encontró el componente DescriptionText (TextMeshProUGUI) en el itemPrefab");
-
-            // Asignar valores solo si tenemos las referencias
             if (pokemonName != null)
+            {
                 pokemonName.text = item.name;
-            if (pokemonDescription != null)
-                pokemonDescription.text = item.description;
+                pokemonName.color = textColor;
+            }
+
             if (pokemonImage != null)
             {
+                pokemonImage.preserveAspect = true;
                 StartCoroutine(PokeAPIManager.Instance.LoadSprite(item.spriteUrl, 
                     (sprite) => pokemonImage.sprite = sprite));
             }

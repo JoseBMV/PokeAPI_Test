@@ -11,6 +11,15 @@ public class PlayerLook : MonoBehaviour
     {
         if (playerCamera == null)
             playerCamera = Camera.main.transform;
+            
+        // Reset rotations to look forward
+        verticalRotation = 0f;
+        playerCamera.localRotation = Quaternion.Euler(0f, 0f, 0f);
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        
+        // Lock and hide cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()

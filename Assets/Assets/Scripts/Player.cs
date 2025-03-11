@@ -1,10 +1,18 @@
 using UnityEngine;
 
+/// <summary>
+/// Clase que controla las funcionalidades principales del jugador.
+/// Maneja la interacción con coleccionables y la interfaz del inventario.
+/// </summary>
 public class Player : MonoBehaviour
 {
     private PlayerMovement movement;
     private PlayerLook look;
 
+    /// <summary>
+    /// Se ejecuta cuando se inicializa el objeto.
+    /// Configura los componentes necesarios y bloquea el cursor del mouse.
+    /// </summary>
     void Awake()
     {
         movement = GetComponent<PlayerMovement>();
@@ -15,13 +23,21 @@ public class Player : MonoBehaviour
         Cursor.visible = false;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// <summary>
+    /// Se ejecuta una vez al inicio antes de la primera actualización.
+    /// Actualmente no tiene implementación.
+    /// </summary>
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Se ejecuta en cada frame del juego.
+    /// Controla las entradas del jugador:
+    /// - Tecla E: Revisa y recoge coleccionables cercanos
+    /// - Tecla I: Alterna la visibilidad del inventario
+    /// </summary>
     void Update()
     {
         // Check for item collection
@@ -37,6 +53,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Busca objetos coleccionables en un radio de 2 unidades alrededor del jugador.
+    /// Si encuentra un coleccionable de tipo Pokémon, lo recoge.
+    /// </summary>
     void CheckForCollectible()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 2f);

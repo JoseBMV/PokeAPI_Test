@@ -2,34 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase encargada de generar niveles procedurales con suelo, paredes, obstáculos, items y Pokémon
+/// </summary>
 public class LevelCreator : MonoBehaviour
 {
     [Header("Level Settings")]
+    /// <summary>Ancho del nivel en unidades</summary>
     public int width = 50;
+    /// <summary>Largo del nivel en unidades</summary>
     public int length = 50;
+    /// <summary>Altura máxima de los obstáculos</summary>
     public int maxHeight = 3;
+    /// <summary>Tamaño de cada unidad/celda del nivel</summary>
     public float roomSize = 1f;
 
     [Header("Prefabs")]
+    /// <summary>Prefab para el suelo del nivel</summary>
     public GameObject floorPrefab;
+    /// <summary>Prefab para las paredes</summary>
     public GameObject wallPrefab;
+    /// <summary>Prefab para el techo</summary>
     public GameObject ceilingPrefab;
+    /// <summary>Array de prefabs para obstáculos aleatorios</summary>
     public GameObject[] obstaclePrefabs;
 
     [Header("Generation Settings")]
+    /// <summary>Porcentaje de probabilidad de generar obstáculos</summary>
     [Range(0, 100)]
     public int obstaclePercentage = 20;
+    /// <summary>Determina si se genera techo en el nivel</summary>
     public bool generateCeiling = true;
 
     [Header("Items Settings")]
+    /// <summary>Porcentaje de probabilidad de generar items</summary>
     [Range(0, 100)]
     public int itemSpawnPercentage = 10;
+    /// <summary>Array de prefabs de items para spawneo</summary>
     public GameObject[] itemPrefabs;
-    public float minItemSpacing = 3f; // Espacio mínimo entre items
+    /// <summary>Distancia mínima entre items</summary>
+    public float minItemSpacing = 3f;
 
     [Header("Pokemon Settings")]
+    /// <summary>Cantidad total de Pokémon a generar en el nivel</summary>
     public int totalPokemonToSpawn = 10;
+    /// <summary>Array de prefabs de Pokémon disponibles</summary>
     public GameObject[] pokemonPrefabs;
+    /// <summary>Distancia mínima entre Pokémon</summary>
     public float minPokemonSpacing = 5f;
     private int pokemonSpawned = 0;
     private List<int> usedPokemonIndices = new List<int>(); // Nueva lista para rastrear índices usados
@@ -40,21 +59,31 @@ public class LevelCreator : MonoBehaviour
     private Dictionary<Vector2Int, List<GameObject>> gridObjects = new Dictionary<Vector2Int, List<GameObject>>();
     private Dictionary<Vector2Int, BlockType> gridBlockTypes = new Dictionary<Vector2Int, BlockType>();
 
+    /// <summary>
+    /// Enum que define los tipos de bloques posibles en el grid
+    /// </summary>
     public enum BlockType
     {
-        Empty,
-        Floor,
-        Obstacle,
-        Wall,
-        Item,
-        Pokemon
+        Empty,      // Espacio vacío
+        Floor,      // Suelo
+        Obstacle,   // Obstáculo
+        Wall,       // Pared
+        Item,       // Item
+        Pokemon     // Pokémon
     }
 
+    /// <summary>
+    /// Inicializa la generación del nivel al comenzar
+    /// </summary>
     private void Start()
     {
         GenerateLevel();
     }
 
+    /// <summary>
+    /// Método principal que coordina la generación completa del nivel
+    /// Limpia el estado anterior y genera todos los elementos del nivel
+    /// </summary>
     void GenerateLevel()
     {
         occupiedPositions.Clear();
@@ -105,6 +134,12 @@ public class LevelCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Genera obstáculos en una posición específica con altura aleatoria
+    /// </summary>
+    /// <param name="x">Posición X en el grid</param>
+    /// <param name="z">Posición Z en el grid</param>
+    /// <param name="container">Contenedor padre para los obstáculos</param>
     private void GenerateObstacle(int x, int z, GameObject container)
     {
         float height = Random.Range(1, maxHeight);
@@ -121,6 +156,10 @@ public class LevelCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Intenta spawner un item en una posición válida
+    /// </summary>
+    /// <returns>True si el item fue spawneado exitosamente</returns>
     private bool TrySpawnItem(int x, int z, GameObject container)
     {
         // Verificar si hay espacio suficiente
@@ -140,6 +179,11 @@ public class LevelCreator : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Intenta spawner un Pokémon en una posición válida
+    /// Asegura que no se repitan los Pokémon usando índices únicos
+    /// </summary>
+    /// <returns>True si el Pokémon fue spawneado exitosamente</returns>
     private bool TrySpawnPokemon(int x, int z, GameObject container)
     {
         // Verificar si aún hay Pokémon disponibles para spawn
@@ -172,6 +216,9 @@ public class LevelCreator : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Sistema de grid que registra objetos y sus tipos en posiciones específicas
+    /// </summary>
     private void AddToGrid(Vector2Int gridPosition, GameObject obj, BlockType type)
     {
         if (!gridObjects.ContainsKey(gridPosition))
@@ -201,7 +248,7 @@ public class LevelCreator : MonoBehaviour
         
         for (int x = -radius; x <= radius; x++)
         {
-            for (int z = -radius; z <= radius; z++)
+            for (int z = -radius; x <= radius; z++)
             {
                 Vector2Int checkPos = new Vector2Int(center.x + x, center.y + z);
                 if (gridObjects.ContainsKey(checkPos))
@@ -214,6 +261,10 @@ public class LevelCreator : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// Verifica si una posición es válida para spawneo basándose en la distancia mínima
+    /// </summary>
+    /// <returns>True si la posición cumple con la distancia mínima requerida</returns>
     private bool IsPositionValid(int x, int z, float minSpacing)
     {
         foreach (Vector2 pos in occupiedPositions)
@@ -227,6 +278,9 @@ public class LevelCreator : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Genera las paredes exteriores del nivel
+    /// </summary>
     void GenerateWalls(GameObject container)
     {
         // Paredes en X
@@ -260,6 +314,9 @@ public class LevelCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Genera el techo del nivel si está activada la opción
+    /// </summary>
     void GenerateCeiling(GameObject container)
     {
         for (int x = 0; x < width; x++)

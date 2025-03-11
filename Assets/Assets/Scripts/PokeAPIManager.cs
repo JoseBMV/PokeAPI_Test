@@ -5,12 +5,25 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
+/// <summary>
+/// Clase principal que gestiona las peticiones a la PokeAPI.
+/// Implementa el patrón Singleton para asegurar una única instancia.
+/// </summary>
 public class PokeAPIManager : MonoBehaviour
 {
+    /// <summary>
+    /// URL base de la API de Pokémon
+    /// </summary>
     private const string API_BASE_URL = "https://pokeapi.co/api/v2/";
 
+    /// <summary>
+    /// Instancia única del manager (Singleton)
+    /// </summary>
     public static PokeAPIManager Instance { get; private set; }
 
+    /// <summary>
+    /// Se ejecuta al iniciar el objeto, configura el Singleton
+    /// </summary>
     void Awake()
     {
         if (Instance == null)
@@ -24,6 +37,11 @@ public class PokeAPIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Obtiene los datos de un Pokémon específico mediante su ID
+    /// </summary>
+    /// <param name="pokemonId">ID del Pokémon a buscar</param>
+    /// <param name="callback">Función que se ejecutará cuando se obtengan los datos</param>
     public IEnumerator FetchPokemonData(int pokemonId, System.Action<PokemonItem> callback)
     {
         string url = $"{API_BASE_URL}pokemon/{pokemonId}";
@@ -62,6 +80,11 @@ public class PokeAPIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Carga un sprite desde una URL
+    /// </summary>
+    /// <param name="url">URL de la imagen a cargar</param>
+    /// <param name="callback">Función que se ejecutará cuando se cargue el sprite</param>
     public IEnumerator LoadSprite(string url, System.Action<Sprite> callback)
     {
         using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(url))
@@ -78,45 +101,90 @@ public class PokeAPIManager : MonoBehaviour
     }
 }
 
+/// <summary>
+/// Clase que representa la estructura de datos JSON recibida de la API
+/// </summary>
 [System.Serializable]
 class PokemonJsonData
 {
+    /// <summary>
+    /// Nombre del Pokémon
+    /// </summary>
     public string name;
+    /// <summary>
+    /// Sprites (imágenes) del Pokémon
+    /// </summary>
     public Sprites sprites;
+    /// <summary>
+    /// Tipos del Pokémon
+    /// </summary>
     public PokemonType[] types;
+    /// <summary>
+    /// Altura del Pokémon
+    /// </summary>
     public int height;
+    /// <summary>
+    /// Peso del Pokémon
+    /// </summary>
     public int weight;
+    /// <summary>
+    /// Experiencia base del Pokémon
+    /// </summary>
     public int base_experience;
+    /// <summary>
+    /// Estadísticas base del Pokémon
+    /// </summary>
     public PokemonStat[] stats;
 }
 
+/// <summary>
+/// Clase que representa el tipo de un Pokémon
+/// </summary>
 [System.Serializable]
 class PokemonType
 {
     public TypeInfo type;
 }
 
+/// <summary>
+/// Información detallada del tipo de Pokémon
+/// </summary>
 [System.Serializable]
 class TypeInfo
 {
     public string name;
 }
 
+/// <summary>
+/// Clase que representa una estadística del Pokémon
+/// </summary>
 [System.Serializable]
 class PokemonStat
 {
+    /// <summary>
+    /// Valor base de la estadística
+    /// </summary>
     public int base_stat;
     public StatInfo stat;
 }
 
+/// <summary>
+/// Información detallada de la estadística
+/// </summary>
 [System.Serializable]
 class StatInfo
 {
     public string name;
 }
 
+/// <summary>
+/// Clase que contiene las URLs de los sprites del Pokémon
+/// </summary>
 [System.Serializable]
 class Sprites
 {
+    /// <summary>
+    /// URL de la imagen frontal por defecto
+    /// </summary>
     public string front_default;
 }

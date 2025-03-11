@@ -1,0 +1,17 @@
+﻿{
+    "stand_looking_m": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": true
+        },
+        "Export Directory": "C:/RLConverterServices/RLConverter/TempData/Convert/9f5f3f734d7edc27/JICb55bb45db65bd29b0",
+        "Object": {
+            "stand_looking_m": {
+                "Generation": "AccuRig",
+                "Physics": {},
+                "Meshes": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+﻿{
+    "male-walk-2-end": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": true
+        },
+        "Export Directory": "C:/RLConverterServices/RLConverter/TempData/Convert/275c5859edb19e49/IC600D010ENU0301A00Z",
+        "Object": {
+            "male-walk-2-end": {
+                "Generation": "AccuRig",
+                "Physics": {},
+                "Meshes": {}
+            }
+        }
+    }
+}

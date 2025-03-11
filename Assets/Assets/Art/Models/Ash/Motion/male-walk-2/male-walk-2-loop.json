@@ -1,0 +1,17 @@
+﻿{
+    "male-walk-2-loop": {
+        "Version": "1.10.1822.1",
+        "Scene": {
+            "Name": true,
+            "SupportShaderSelect": true
+        },
+        "Export Directory": "C:/RLConverterServices/RLConverter/TempData/Convert/e6dfac82a60cced8/IC600D010ENU0301A010",
+        "Object": {
+            "male-walk-2-loop": {
+                "Generation": "AccuRig",
+                "Physics": {},
+                "Meshes": {}
+            }
+        }
+    }
+}

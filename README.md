@@ -10,7 +10,7 @@ Este proyecto es una implementación de prueba que utiliza la PokeAPI para obten
 
 1. Clona este repositorio:
 ```bash
-git clone https://github.com/tu-usuario/PokeAPI_Test.git
+git clone https://github.com/JoseBMV/PokeAPI_Test.git
 cd PokeAPI_Test
 ```
 
